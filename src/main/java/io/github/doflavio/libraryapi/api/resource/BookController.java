@@ -2,6 +2,7 @@ package io.github.doflavio.libraryapi.api.resource;
 
 import io.github.doflavio.libraryapi.api.dto.BookDTO;
 import io.github.doflavio.libraryapi.api.exception.ApiErros;
+import io.github.doflavio.libraryapi.exception.BusinessException;
 import io.github.doflavio.libraryapi.model.entity.Book;
 import io.github.doflavio.libraryapi.service.BookService;
 import org.modelmapper.ModelMapper;
@@ -42,6 +43,12 @@ public class BookController {
         BindingResult bindingResult = ex.getBindingResult();
         List<ObjectError> alErrors = bindingResult.getAllErrors();
         return new ApiErros(bindingResult);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErros handleValidationExceptions(BusinessException ex){
+        return new ApiErros(ex);
     }
 
 

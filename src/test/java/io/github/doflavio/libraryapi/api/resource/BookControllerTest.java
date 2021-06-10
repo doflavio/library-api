@@ -3,6 +3,7 @@ package io.github.doflavio.libraryapi.api.resource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.doflavio.libraryapi.api.dto.BookDTO;
+import io.github.doflavio.libraryapi.exception.BusinessException;
 import io.github.doflavio.libraryapi.model.entity.Book;
 import io.github.doflavio.libraryapi.service.BookService;
 import org.hamcrest.Matchers;
@@ -42,7 +43,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("Deve criar um livro com sucesso.")
     public void createBookTest() throws Exception {
-        BookDTO dto = BookDTO.builder().author("Artur").title("As aventuras").isbn("001").build();
+        BookDTO dto = createNewBookDto();
 
         Book savedBook = Book.builder().id(10l).author("Artur").title("As aventuras").isbn("001").build();
 
@@ -81,6 +82,35 @@ public class BookControllerTest {
         mvc.perform(request)
                 .andExpect( MockMvcResultMatchers.status().isBadRequest())
                 .andExpect( MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(3)));
+    }
+
+    @Test
+    @DisplayName("Deve lançar erro ao tentar cadastrar um livro com isbn já utilizado por outro.")
+    public void createBookWithDuplicateIsbn() throws Exception {
+
+        BookDTO dto = createNewBookDto();
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        String mensagemErro = "isbn já cadastrado.";
+        BDDMockito.given( service.save(Mockito.any( Book.class)))
+                    .willThrow(new BusinessException(mensagemErro));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(BOOK_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect( MockMvcResultMatchers.status().isBadRequest())
+                .andExpect( MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect( MockMvcResultMatchers.jsonPath("errors[0]").value(mensagemErro))
+        ;
+
+    }
+
+    private BookDTO createNewBookDto() {
+        return BookDTO.builder().author("Artur").title("As aventuras").isbn("001").build();
     }
 
 }
