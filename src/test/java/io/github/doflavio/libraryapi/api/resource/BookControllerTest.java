@@ -43,7 +43,7 @@ public class BookControllerTest {
     public void createBookTest() throws Exception {
         BookDTO dto = BookDTO.builder().author("Artur").title("As aventuras").isbn("001").build();
 
-        Book savedBook = Book.builder().id(101L).author("Artur").title("As aventuras").isbn("001").build();
+        Book savedBook = Book.builder().id(10l).author("Artur").title("As aventuras").isbn("001").build();
 
         BDDMockito.given(service.save(Mockito.any(Book.class))).willReturn(savedBook);
 
@@ -57,7 +57,7 @@ public class BookControllerTest {
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("id").value(101L))
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(10l))
                 .andExpect(MockMvcResultMatchers.jsonPath("title").value(dto.getTitle()))
                 .andExpect(MockMvcResultMatchers.jsonPath("author").value(dto.getAuthor()))
                 .andExpect(MockMvcResultMatchers.jsonPath("isbn").value(dto.getIsbn()))
