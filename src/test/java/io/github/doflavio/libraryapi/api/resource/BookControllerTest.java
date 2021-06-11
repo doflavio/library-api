@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Optional;
+
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -106,6 +108,51 @@ public class BookControllerTest {
                 .andExpect( MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)))
                 .andExpect( MockMvcResultMatchers.jsonPath("errors[0]").value(mensagemErro))
         ;
+
+    }
+
+    @Test@DisplayName("Deve obter infomações de um livro.")
+    public void getBookDetailsTest() throws Exception{
+
+        //Cenário(given)
+        Long id = 1l;
+
+        Book book = Book.builder().id(id)
+                        .author("Artur")
+                        .title("As aventuras")
+                        .isbn("001")
+                        .build();
+        BDDMockito.given(service.getById(id)).willReturn(Optional.of(book));
+
+        //Execução(when)
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(BOOK_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(1l))
+                .andExpect(MockMvcResultMatchers.jsonPath("title").value(createNewBookDto().getTitle()))
+                .andExpect(MockMvcResultMatchers.jsonPath("author").value(createNewBookDto().getAuthor()))
+                .andExpect(MockMvcResultMatchers.jsonPath("isbn").value(createNewBookDto().getIsbn()));
+
+
+    }
+
+    @Test@DisplayName("Deve retornar resource not found quando o livro procurado não existir")
+    public void bookNotFoundTest() throws Exception{
+
+        //Cenário(given)
+        Long id = 1l;
+        BDDMockito.given(service.getById( Mockito.anyLong()) ).willReturn(Optional.empty());
+
+        //Execução(when)
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(BOOK_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
 
     }
 

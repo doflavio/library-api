@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,6 +26,13 @@ public class BookController {
     public BookController(BookService service,ModelMapper modelMapper) {
         this.service = service;
         this.modelMapper = modelMapper;
+    }
+
+    @GetMapping("{id}")
+    public BookDTO get(@PathVariable Long id) {
+        return service.getById(id).map(
+            book -> modelMapper.map(book, BookDTO.class)
+        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
