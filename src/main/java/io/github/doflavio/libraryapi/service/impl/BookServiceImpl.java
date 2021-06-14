@@ -38,6 +38,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Optional<Book> getBookByIsbn(String isbn) {
+        return Optional.empty();
+    }
+
+    @Override
     public Book save(Book book) {
         if(repository.existsByIsbn(book.getIsbn())){
             throw new BusinessException("isbn já cadastrado.");
