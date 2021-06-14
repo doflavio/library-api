@@ -74,10 +74,10 @@ public class LoanControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loanJson);
 
-        //Execução
+        //Execução/verificação
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isCreated() )
-                .andExpect( MockMvcResultMatchers.jsonPath("id").value(id) );
+                .andExpect( MockMvcResultMatchers.content().string("1" ));
 
         //Verificação
     }
