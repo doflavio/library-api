@@ -7,6 +7,7 @@ import io.github.doflavio.libraryapi.model.entity.Loan;
 import io.github.doflavio.libraryapi.service.BookService;
 import io.github.doflavio.libraryapi.service.LoanService;
 import io.github.doflavio.libraryapi.service.impl.BookServiceImpl;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,9 +71,9 @@ public class LoanControllerTest {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                                                         .post(LOAN_API)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(loanJson);
+                                                        .accept(MediaType.APPLICATION_JSON)
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(loanJson);
 
         //Execução/verificação
         mvc.perform(request)
@@ -80,5 +81,31 @@ public class LoanControllerTest {
                 .andExpect( MockMvcResultMatchers.content().string("1" ));
 
         //Verificação
+    }
+
+    @Test
+    @DisplayName("Deve retornar erro ao tentar fazer emprestimo de um livro indexistente")
+    public void invalidInsbnCreateLoanTest() throws Exception{
+        //Cenário
+        String isbn = "123";
+        LoanDTO emprestimoDTO = LoanDTO.builder().isbn(isbn).customer("Fulano").build();
+        String loanJson = new ObjectMapper().writeValueAsString(emprestimoDTO);
+
+        BDDMockito.given( bookService.getBookByIsbn("123") ).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                                                    .post(LOAN_API)
+                                                    .accept(MediaType.APPLICATION_JSON)
+                                                    .contentType(MediaType.APPLICATION_JSON)
+                                                    .content(loanJson);
+
+        //Execução/verificação
+        mvc.perform(request)
+                .andExpect( MockMvcResultMatchers.status().isBadRequest())
+                .andExpect( MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect( MockMvcResultMatchers.jsonPath("errors[0]")
+                                .value("Book not found for passed isbn"));
+
+
     }
 }
