@@ -17,12 +17,12 @@ public class BookServiceImpl implements BookService {
 
     private BookRepository repository;
 
-    public BookServiceImpl(BookRepository repository) {
+    public BookServiceImpl(BookRepository repository){
         this.repository = repository;
     }
 
     @Override
-    public Optional<Book> getById(Long id) {
+    public Optional<Book> getById(Long id){
         return this.repository.findById(id);
     }
 
@@ -38,8 +38,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getBookByIsbn(String isbn) {
-        return Optional.empty();
+    public Optional<Book> getBookByIsbn(String isbn){
+        return repository.findByIsbn(isbn);
     }
 
     @Override
