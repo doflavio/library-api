@@ -2,6 +2,7 @@ package io.github.doflavio.libraryapi.service.impl;
 
 import io.github.doflavio.libraryapi.api.dto.LoanFilterDTO;
 import io.github.doflavio.libraryapi.exception.BusinessException;
+import io.github.doflavio.libraryapi.model.entity.Book;
 import io.github.doflavio.libraryapi.model.entity.Loan;
 import io.github.doflavio.libraryapi.model.repository.LoanRepository;
 import io.github.doflavio.libraryapi.service.LoanService;
@@ -40,5 +41,10 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public Page<Loan> find(LoanFilterDTO filterDTO, Pageable pageable) {
         return loanRepository.findByBookIsbnOrCustomer(filterDTO.getIsbn(),filterDTO.getCustomer(),pageable);
+    }
+
+    @Override
+    public Page<Loan> getLoansByBook(Book book, Pageable pageable) {
+        return loanRepository.findByBook(book,pageable);
     }
 }
