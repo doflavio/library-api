@@ -62,7 +62,7 @@ public class LoanControllerTest {
         Long id = 1l;
         String isbn = "123";
 
-        LoanDTO emprestimoDTO = LoanDTO.builder().isbn(isbn).customer("Fulano").build();
+        LoanDTO emprestimoDTO = LoanDTO.builder().isbn(isbn).email("customer@email.com").customer("Fulano").build();
         String loanJson = new ObjectMapper().writeValueAsString(emprestimoDTO);
 
         Book book = Book.builder().id(id).isbn(isbn).build();
