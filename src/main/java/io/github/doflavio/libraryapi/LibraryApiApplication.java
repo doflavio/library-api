@@ -16,13 +16,16 @@ public class LibraryApiApplication {
 		return new ModelMapper();
 	}
 
+	public static void main(String[] args){
+		SpringApplication.run(LibraryApiApplication.class, args);
+	}
+
+
+	/* Método usado para teste
 	@Scheduled(cron = "0 36 12 1/1 * ?") // http://www.cronmaker.com/;jsessionid=node0dez4znzqnvlpuozoq901dj7l767989.node0?0
 	public void testeAgendamentoTarefas(){
 		System.out.println("AGENDAMENTO DE TAREFAS FUNCIONANDO COM SUCESSO");
 	}
-
-	public static void main(String[] args){
-		SpringApplication.run(LibraryApiApplication.class, args);
-	}
+	 */
 
 }
