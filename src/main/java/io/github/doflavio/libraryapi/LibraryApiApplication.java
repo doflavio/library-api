@@ -8,6 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
@@ -22,11 +26,7 @@ public class LibraryApiApplication {
 		SpringApplication.run(LibraryApiApplication.class, args);
 	}
 
-}
-
-
-/* Método usado para teste momentâneos
-
+	/* Método usado para teste
 	@Scheduled(cron = "0 36 12 1/1 * ?") // http://www.cronmaker.com/;jsessionid=node0dez4znzqnvlpuozoq901dj7l767989.node0?0
 	public void testeAgendamentoTarefas(){
 		System.out.println("AGENDAMENTO DE TAREFAS FUNCIONANDO COM SUCESSO");
@@ -41,3 +41,5 @@ public class LibraryApiApplication {
 		};
 	}
 	 */
+
+}
