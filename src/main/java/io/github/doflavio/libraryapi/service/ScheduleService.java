@@ -28,8 +28,6 @@ public class ScheduleService {
         List<String> mailList = allLateLoans.stream().map(
                 loan -> loan.getCustomerEmail()).collect(Collectors.toList());
 
-
-
         emailService.sendMails(message,mailList);
     }
 }
