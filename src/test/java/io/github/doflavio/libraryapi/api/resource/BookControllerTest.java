@@ -6,6 +6,7 @@ import io.github.doflavio.libraryapi.api.dto.BookDTO;
 import io.github.doflavio.libraryapi.exception.BusinessException;
 import io.github.doflavio.libraryapi.model.entity.Book;
 import io.github.doflavio.libraryapi.service.BookService;
+import io.github.doflavio.libraryapi.service.LoanService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,9 @@ public class BookControllerTest {
 
     @MockBean
     BookService service;
+
+    @MockBean
+    LoanService loanService;
 
     @Test
     @DisplayName("Deve criar um livro com sucesso.")
