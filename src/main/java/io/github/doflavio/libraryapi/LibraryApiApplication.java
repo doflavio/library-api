@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class LibraryApiApplication extends SpringBootServletInitializer {
+public class LibraryApiApplication {
 
 	@Bean
 	public ModelMapper modelMapper() {
